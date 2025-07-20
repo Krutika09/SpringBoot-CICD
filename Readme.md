@@ -76,6 +76,47 @@ squ_ffff6c62821a7f22fed8ae76cf4a44f1e55602d0
 
 Add this token in Jenkins as a **Secret Text Credential**.
 
+
+Add sonar-token credential to Jenkins
+Follow these steps:
+
+Go to Jenkins Dashboard
+
+Click on "Manage Jenkins"
+
+Click on "Credentials"
+
+Select the domain ((global) if you're unsure)
+
+Click on "Add Credentials"
+
+Choose:
+
+Kind: Secret text
+
+Secret: Paste your actual SonarQube token here
+
+ID: sonar-token (must exactly match what’s in the Jenkinsfile)
+
+Description: (optional) SonarQube access token
+
+Click "OK" 
+
+Jenkins Credentials
+Jenkins → Manage Jenkins → Credentials
+
+Select (global) → Add Credentials
+
+Fill in:
+
+Kind: Username with password
+
+Username: your-github-username
+
+Password: paste the PAT (personal access token)
+
+ID: github-token (or any name you use in Jenkinsfile)
+
 ---
 
 ## 5. Restart Jenkins From UI
