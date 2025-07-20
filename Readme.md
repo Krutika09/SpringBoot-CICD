@@ -57,6 +57,11 @@ cd bin/linux-x86-64
 ./sonar.sh start
 ```
 
+```
+sudo apt update
+sudo apt install -y maven
+```
+
 Access SonarQube:
 
 ```
