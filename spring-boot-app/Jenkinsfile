@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
-                git branch: 'main', url: 'https://github.com/Krutika09/java-maven-sonar-argocd-helm-k8s.git'
+                git branch: 'main', credentialsId: 'github-token', url: 'https://github.com/Krutika09/SpringBoot-CICD.git'
             }
         }
 
