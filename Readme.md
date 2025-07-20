@@ -97,6 +97,13 @@ minikube start --memory=4096 --cpus=2
 curl -sL https://github.com/operator-framework/operator-lifecycle-manager/releases/download/v0.32.0/install.sh | bash -s v0.32.0
 ```
 
+```
+kubectl create -f https://operatorhub.io/install/argocd-operator.yaml
+```
+
+```
+kubectl get csv -n operators
+```
 ---
 
 ## 7. Add Jenkins Credentials
