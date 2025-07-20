@@ -1,0 +1,66 @@
+pipeline {
+    agent any
+
+    environment {
+        SONAR_TOKEN = credentials('sonar-token')
+        IMAGE_NAME = 'krutika09/springboot-demo-app'
+    }
+
+    stages {
+        stage('Checkout Code') {
+            steps {
+                git branch: 'main', url: 'https://github.com/Krutika09/java-maven-sonar-argocd-helm-k8s.git'
+            }
+        }
+
+        stage('Build with Maven') {
+            steps {
+                dir('spring-boot-app') {
+                    sh 'mvn clean package'
+                }
+            }
+        }
+
+        stage('Static Code Analysis') {
+            steps {
+                dir('spring-boot-app') {
+                    sh '''
+                        mvn sonar:sonar \
+                          -Dsonar.projectKey=springboot \
+                          -Dsonar.host.url=http://44.246.124.156:9000 \
+                          -Dsonar.login=$SONAR_TOKEN
+                    '''
+                }
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                dir('spring-boot-app') {
+                    sh 'docker build -t $IMAGE_NAME .'
+                }
+            }
+        }
+
+        stage('Push to DockerHub') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-cred', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    sh '''
+                        echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                        docker push $IMAGE_NAME
+                    '''
+                }
+            }
+        }
+
+        stage('Update Deployment File') {
+            steps {
+                dir('spring-boot-app-manifests') {
+                    sh '''
+                        sed -i "s@image:.*@image: $IMAGE_NAME@g" deployment.yml
+                    '''
+                }
+            }
+        }
+    }
+}
