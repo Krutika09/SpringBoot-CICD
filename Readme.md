@@ -73,11 +73,7 @@ Login using:
 * **Username:** admin
 * **Password:** admin
 
-Then generate a secret token:
-
-```
-squ_ffff6c62821a7f22fed8ae76cf4a44f1e55602d0
-```
+Then generate a secret token and copy the token 
 
 Add this token in Jenkins as a **Secret Text Credential**.
 
@@ -151,31 +147,3 @@ kubectl create -f https://operatorhub.io/install/argocd-operator.yaml
 kubectl get csv -n operators
 ```
 ---
-
-## 7. Add Jenkins Credentials
-
-* **DockerHub:** Username + Personal Access Token
-* **GitHub:** Username + PAT with repo scope
-* **SonarQube Token:** Secret Text Credential using the token created above
-
----
-
-## 8. Sample Jenkinsfile Stage for SonarQube
-
-```groovy
-stage('Static Code Analysis') {
-    environment {
-        SONAR_URL = "http://<public-ip>:9000"
-    }
-    steps {
-        script {
-            withSonarQubeEnv('SonarQube') {
-                sh 'mvn sonar:sonar'
-            }
-        }
-    }
-}
-```
-Replace `<public-ip>` with your actual instance IP and `SonarQube` with the credential ID you set.
-
-
